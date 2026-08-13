@@ -1,0 +1,4 @@
+#pragma once
+
+#define LIVE_HUD_VERSION "@PROJECT_VERSION@"
+#define LIVE_HUD_VERSION_W L"@PROJECT_VERSION@"

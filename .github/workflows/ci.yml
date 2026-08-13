@@ -1,0 +1,38 @@
+name: Windows CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-package:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake --preset windows-vs2022
+
+      - name: Build release and tests
+        run: |
+          cmake --build --preset release --target dist
+          cmake --build --preset tests
+
+      - name: Test
+        run: ctest --preset release
+
+      - name: Package
+        run: cmake --build --preset release --target package
+
+      - name: Upload release archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: CS2-Demo-Live-HUD-win64
+          path: |
+            build/*.zip
+            build/*.sha256
+          if-no-files-found: error
